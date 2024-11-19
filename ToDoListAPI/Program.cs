@@ -1,4 +1,6 @@
 
+using ToDoListAPI.Repositories;
+
 namespace ToDoListAPI
 {
     public class Program
@@ -6,6 +8,9 @@ namespace ToDoListAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            // Adding an InMemoryDatabase for APIs to simulate data retrieval
+            builder.Services.AddScoped<IToDoListRepository, ToDoListRepository>();
 
             // Add services to the container.
 
@@ -17,7 +22,7 @@ namespace ToDoListAPI
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
