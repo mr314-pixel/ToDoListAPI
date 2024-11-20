@@ -1,6 +1,6 @@
 ﻿namespace ToDoListAPI.Models
 {
-    public class ToDoItem_Input
+    public class ToDoItem_Post
     {
         public int ToDoListId { get; set; }
         public string? Title { get; set; }

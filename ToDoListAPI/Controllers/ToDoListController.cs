@@ -22,9 +22,20 @@ namespace ToDoListAPI.Controllers
         }
 
         [HttpPost("~/CreateToDoItem")]
-        public ActionResult<ToDoItem> CreateToDoItem([FromQuery] ToDoItem_Input item)
+        public ActionResult<ToDoItem> CreateToDoItem([FromQuery] ToDoItem_Post item)
         {
             return Ok(_toDoListRepository.CreateToDoItem(item));
+        }
+
+        [HttpPatch("~/UpdateToDoItem")]
+        public ActionResult<ToDoItem> UpdateToDoItem([FromQuery] ToDoItem_Patch item)
+        {
+            var result = _toDoListRepository.UpdateToDoItem(item);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }

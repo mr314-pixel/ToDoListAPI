@@ -17,7 +17,7 @@ namespace ToDoListAPI.Repositories
         }
 
         // TODO: Create ToDoList object when a new ToDoListId is provided
-        public ToDoItem CreateToDoItem(ToDoItem_Input item)
+        public ToDoItem CreateToDoItem(ToDoItem_Post item)
         {
             using (var context = new ApiContext())
             {
@@ -36,9 +36,32 @@ namespace ToDoListAPI.Repositories
             }
         }
 
-        public ToDoItem UpdateToDoItem(ToDoItem item)
+        public ToDoItem? UpdateToDoItem(ToDoItem_Patch item)
         {
-            throw new NotImplementedException();
+            using (var context = new ApiContext())
+            {
+                var itemList = context.ToDoItems.Where(s => s.Id == item.Id);
+                if (itemList.Count() != 1)
+                {
+                    return null;
+                }
+                ToDoItem existingItem = itemList.First();
+                if (item.IsUpdatingTitle)
+                {
+                    existingItem.Title = item.Title;
+                }
+                if (item.IsUpdatingDescription)
+                {
+                    existingItem.Description = item.Description;
+                }
+                if (item.IsUpdatingCompletedDate)
+                {
+                    existingItem.CompletedDate = item.CompletedDate;
+                }
+                context.SaveChanges();
+
+                return existingItem;
+            }
         }
     }
 }
