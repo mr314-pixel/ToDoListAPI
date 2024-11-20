@@ -1,22 +1,42 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "ToDoListAPI",
-    "version": "1.0"
+    "title": "To-Do List API Documentation",
+    "description": "A client has commissioned your organisation to build a small application for creating and managing to-do lists. They prefer to use the .NET ecosystem, and have requested that it is used for this solution.",
+    "contact": {
+      "name": "mr314-pixel",
+      "email": "not@email.com"
+    },
+    "version": "v1"
   },
   "paths": {
-    "/GetWeatherForecastByCity/{city}": {
+    "/GetToDoItems": {
       "get": {
         "tags": [
-          "WeatherForecast"
+          "ToDoList"
         ],
+        "summary": "Get items in a to-do list.",
         "parameters": [
           {
-            "name": "city",
-            "in": "path",
-            "required": true,
+            "name": "toDoItemIds",
+            "in": "query",
+            "description": "Filter items by a list of item IDs. An empty list will return all available items.",
             "schema": {
-              "type": "string"
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          {
+            "name": "toDoListId",
+            "in": "query",
+            "description": "Filter items by to-do list ID.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
             }
           }
         ],
@@ -28,7 +48,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/ToDoItem"
                   }
                 }
               },
@@ -36,7 +56,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/ToDoItem"
                   }
                 }
               },
@@ -44,7 +64,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
+                    "$ref": "#/components/schemas/ToDoItem"
                   }
                 }
               }
@@ -53,10 +73,43 @@
         }
       }
     },
-    "/GetWeatherForecast": {
-      "get": {
+    "/CreateToDoItem": {
+      "post": {
         "tags": [
-          "WeatherForecast"
+          "ToDoList"
+        ],
+        "summary": "Create an item in a specific to-do list.",
+        "parameters": [
+          {
+            "name": "ToDoListId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Title",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "CompletedDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -64,26 +117,100 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/ToDoItem"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/ToDoItem"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "$ref": "#/components/schemas/ToDoItem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UpdateToDoItem": {
+      "patch": {
+        "tags": [
+          "ToDoList"
+        ],
+        "summary": "Update an item.",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "IsUpdatingTitle",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Title",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsUpdatingDescription",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "IsUpdatingCompletedDate",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "CompletedDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoItem"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoItem"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToDoItem"
                 }
               }
             }
@@ -94,71 +221,36 @@
   },
   "components": {
     "schemas": {
-      "DateOnly": {
+      "ToDoItem": {
         "type": "object",
         "properties": {
-          "year": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "month": {
+          "toDoListId": {
             "type": "integer",
             "format": "int32"
           },
-          "day": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "dayOfWeek": {
-            "$ref": "#/components/schemas/DayOfWeek"
-          },
-          "dayOfYear": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "dayNumber": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "DayOfWeek": {
-        "enum": [
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6
-        ],
-        "type": "integer",
-        "format": "int32"
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "date": {
-            "$ref": "#/components/schemas/DateOnly"
-          },
-          "temperatureC": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "temperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
-          },
-          "summary": {
+          "title": {
             "type": "string",
             "nullable": true
           },
-          "city": {
+          "description": {
             "type": "string",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "isCompleted": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "completedDate": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },
