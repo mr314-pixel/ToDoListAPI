@@ -18,13 +18,14 @@ namespace ToDoListAPI.Controllers
         /// <summary>
         /// Get items in a to-do list.
         /// </summary>
-        /// <param name="toDoItemIds">Filter items by a list of item IDs. An empty list will return all available items.</param>
+        /// <param name="toDoItemIds">Filter items by a list of comma separated item IDs. An empty list will return all available items.</param>
         /// <param name="toDoListId">Filter items by to-do list ID.</param>
         /// <returns>List of matched items.</returns>
         [HttpGet("~/GetToDoItems")]
-        public ActionResult<IEnumerable<ToDoItem>> GetToDoItems([FromQuery] List<int> toDoItemIds, [FromQuery] int toDoListId = 0)
+        public ActionResult<IEnumerable<ToDoItem>> GetToDoItems([FromQuery] string? toDoItemIds, [FromQuery] int toDoListId = 0)
         {
-            return Ok(_toDoListRepository.GetToDoItems(toDoItemIds, toDoListId));
+            // TODO: error handling on the input string
+            return Ok(_toDoListRepository.GetToDoItems(toDoItemIds?.Split(',').Where(s => { int r; return int.TryParse(s, out r); }).Select(int.Parse).ToList(), toDoListId));
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ namespace ToDoListAPI.Repositories
 {
     public class ToDoListRepository : IToDoListRepository
     {
-        public List<ToDoItem> GetToDoItems(List<int> toDoItemId, int toDoListId)
+        public List<ToDoItem> GetToDoItems(List<int>? toDoItemId, int toDoListId)
         {
             using (var context = new ApiContext())
             {
