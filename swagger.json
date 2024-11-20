@@ -20,13 +20,9 @@
           {
             "name": "toDoItemIds",
             "in": "query",
-            "description": "Filter items by a list of item IDs. An empty list will return all available items.",
+            "description": "Filter items by a list of comma separated item IDs. An empty list will return all available items.",
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "integer",
-                "format": "int32"
-              }
+              "type": "string"
             }
           },
           {
