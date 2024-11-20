@@ -20,5 +20,11 @@ namespace ToDoListAPI.Controllers
         {
             return Ok(_toDoListRepository.GetToDoItems(toDoItemIds, toDoListId));
         }
+
+        [HttpPost("~/CreateToDoItem")]
+        public ActionResult<ToDoItem> CreateToDoItem([FromQuery] ToDoItem_Input item)
+        {
+            return Ok(_toDoListRepository.CreateToDoItem(item));
+        }
     }
 }

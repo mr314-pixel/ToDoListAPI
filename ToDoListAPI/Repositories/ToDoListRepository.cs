@@ -44,9 +44,24 @@ namespace ToDoListAPI.Repositories
             }
         }
 
-        public ToDoItem CreateToDoItem(ToDoItem item)
+        // TODO: Create ToDoList object when a new ToDoListId is provided
+        public ToDoItem CreateToDoItem(ToDoItem_Input item)
         {
-            throw new NotImplementedException();
+            using (var context = new ApiContext())
+            {
+                ToDoItem newItem = new ToDoItem
+                {
+                    ToDoListId = item.ToDoListId,
+                    Title = item.Title,
+                    Description = item.Description,
+                    CreatedDate = DateTime.UtcNow,
+                    CompletedDate = item.CompletedDate
+                };
+                context.ToDoItems.Add(newItem);
+                context.SaveChanges();
+
+                return newItem;
+            }
         }
 
         public ToDoItem UpdateToDoItem(ToDoItem item)
